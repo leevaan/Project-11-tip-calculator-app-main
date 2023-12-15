@@ -79,15 +79,13 @@ document.querySelector(".left-middle-cont").addEventListener("click", event => {
       }else if(eventTarget.classList[1] == "show"){   
         tipAction = "inactive";
         eventTarget.classList.remove("show");
-        if(personClass.value == ""  && billClass.value == "" && customClass.value == ""){
+        if(personClass.value == ""  && billClass.value == "" && customClass.value == ""  && tipAction == "inactive"){
             button.style.backgroundColor = "";
         }
-        // button.style.backgroundColor = "";
         numClass = null;
         amount.innerHTML = "$0.00";
         totalPerson.innerHTML = "$0.00";
     }
-
     if(personValue > 0 && billValue > 0 && numClass != null){
         condition(billValue, numClass, personValue);
     }
@@ -100,11 +98,11 @@ customClass.addEventListener("input", () => {
     button.style.backgroundColor = "#26C2AE";
     for(let i = 0; i < tipClass.length; i++){
         tipClass[i].classList.remove("show");
+        tipAction = "inactive";
     }
-    if(typeof Number(customClass.value) == "number" && personClass.value > 0 && billClass.value > 0 && customClass.value != ""){
-        condition(billValue, customValue, personValue);
+    if(customClass.value > 0 && personClass.value > 0 && billClass.value > 0 && customClass.value != ""){
+          condition(billValue, customValue, personValue);
     }else if(customValue == ""){ //თუ მომხმარებელი ქასთმ ველიუში ჩაწერილ ციფრებს წაშლის უნდა განულდეს ტიპ და ტოტალ ველიუები
-        // button.style.backgroundColor = "";
         totalPerson.innerHTML = "$0.00";
         amount.innerHTML = "$0.00";
     }else{
