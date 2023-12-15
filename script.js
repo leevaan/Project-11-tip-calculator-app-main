@@ -12,7 +12,7 @@ const personBorder = document.querySelectorAll(".input-div")[1];
 const button = document.getElementsByTagName("button")[0];
 const tipClass = document.querySelectorAll(".tip");
 
-let tip, total, billValue, personValue, customValue, numClass;
+let tip, total, billValue, personValue, customValue, numClass, tipAction;
 console.log("🚀 ~ file: script.js:78 ~ personClass.addEventListener ~ personValue:", personValue)
 // bill border style.
 billClass.addEventListener("focus", () => {
@@ -56,7 +56,7 @@ billClass.addEventListener("input", () =>{
     button.style.backgroundColor = "#26C2AE";
     billValue = billClass.value;
 
-    if(billValue == ""){
+    if(personClass.value == ""  && billClass.value == "" && customClass.value == "" && tipAction == "inactive"){
         button.style.backgroundColor = "";
     }
     if(personValue > 0 && billValue > 0 && numClass != undefined){
@@ -64,7 +64,59 @@ billClass.addEventListener("input", () =>{
     }
 });
 
+// როდესაც ფიქსირებულ პროცენტს ირჩევს.
+document.querySelector(".left-middle-cont").addEventListener("click", event => {
+    numClass = event.target.getAttribute("num");
+    let eventTarget = event.target;
+   
+    if(eventTarget.classList[1] == undefined && eventTarget.classList[0] == "tip")
+    {    
+        tipAction = "active";
+        for(let i = 0; i < tipClass.length; i++){
+            tipClass[i].classList.remove("show");
+        }
+        customClass.value = "";
+        eventTarget.classList.add("show");
+        button.style.backgroundColor = "#26C2AE";
+      }else if(eventTarget.classList[1] == "show"){   
+        tipAction = "inactive";
+        eventTarget.classList.remove("show");
+        if(personClass.value == ""  && billClass.value == "" && customClass.value == ""){
+            button.style.backgroundColor = "";
+        }
+        // button.style.backgroundColor = "";
+        numClass = null;
+        amount.innerHTML = "$0.00";
+        totalPerson.innerHTML = "$0.00";
+    }
+
+    if(personValue > 0 && billValue > 0 && numClass != null){
+        condition(billValue, numClass, personValue);
+    }
+});
+
 //ვიმახსოვრებთ ველიუში ჩაწერილ ციფრს და სამი ველიუდან ( Bill, precent, person) თუ ბოლოს შევსო person ველიუ ეს გაუშვებს დავთვლის ფუნქციას 
+// კოსტუმ ველიუი. იმახსოვრებს შეყვანილს ციფრს.შეყვანილ ციფრს სტრინგად აქცევს ნომრად და თუ სასვსე დანარჩენი ორი ველი იძახებს გამოთვლის ფუნქციას.
+customClass.addEventListener("input", () => {
+    customValue = customClass.value;
+    button.style.backgroundColor = "#26C2AE";
+    for(let i = 0; i < tipClass.length; i++){
+        tipClass[i].classList.remove("show");
+    }
+    if(typeof Number(customClass.value) == "number" && personClass.value > 0 && billClass.value > 0 && customClass.value != ""){
+        condition(billValue, customValue, personValue);
+    }else if(customValue == ""){ //თუ მომხმარებელი ქასთმ ველიუში ჩაწერილ ციფრებს წაშლის უნდა განულდეს ტიპ და ტოტალ ველიუები
+        // button.style.backgroundColor = "";
+        totalPerson.innerHTML = "$0.00";
+        amount.innerHTML = "$0.00";
+    }else{
+        numClass = customValue;
+    }
+    if(personClass.value == "" && billClass.value == "" && customClass.value == "" && tipAction == "inactive"){
+        button.style.backgroundColor = "";
+    }
+});
+
 personClass.addEventListener("input", () =>{
     personClass.style.background = "transparent";
     personValue = personClass.value;
@@ -81,7 +133,7 @@ personClass.addEventListener("input", () =>{
         document.querySelector(".person-alert").style.display = "none";
         document.querySelector(".person-path").style.fill = "#00474B";
     } 
-    if(personValue == ""){
+    if(personClass.value == ""  && billClass.value == "" && customClass.value == "" && tipAction == "inactive"){
         button.style.backgroundColor = "";
     }
 
@@ -89,49 +141,8 @@ personClass.addEventListener("input", () =>{
         condition(billValue, numClass, personValue);
     }
 });
-// როდესაც ფიქსირებულ პროცენტს ირჩევს.
-document.querySelector(".left-middle-cont").addEventListener("click", event => {
-    numClass = event.target.getAttribute("num");
-    let eventTarget = event.target;
-   
-    if(eventTarget.classList[1] == undefined && eventTarget.classList[0] == "tip")
-    {    
-        for(let i = 0; i < tipClass.length; i++){
-            tipClass[i].classList.remove("show");
-        }
-        customClass.value = "";
-        eventTarget.classList.add("show");
-        button.style.backgroundColor = "#26C2AE";
-      }else if(eventTarget.classList[1] == "show"){   
-        eventTarget.classList.remove("show");
-        button.style.backgroundColor = "";
-        numClass = null;
-        amount.innerHTML = "$0.00";
-        totalPerson.innerHTML = "$0.00";
-    }
 
-    if(personValue > 0 && billValue > 0 && numClass != null){
-        condition(billValue, numClass, personValue);
-    }
-});
 
-// კოსტუმ ველიუი. იმახსოვრებს შეყვანილს ციფრს.შეყვანილ ციფრს სტრინგად აქცევს ნომრად და თუ სასვსე დანარჩენი ორი ველი იძახებს გამოთვლის ფუნქციას.
-customClass.addEventListener("input", () => {
-    customValue = customClass.value;
-    button.style.backgroundColor = "#26C2AE";
-    for(let i = 0; i < tipClass.length; i++){
-        tipClass[i].classList.remove("show");
-    }
-    if(typeof Number(customClass.value) == "number" && personClass.value > 0 && billClass.value > 0 && customClass.value != ""){
-        condition(billValue, customValue, personValue);
-    }else if(customValue == ""){ //თუ მომხმარებელი ქასთმ ველიუში ჩაწერილ ციფრებს წაშლის უნდა განულდეს ტიპ და ტოტალ ველიუები
-        button.style.backgroundColor = "";
-        totalPerson.innerHTML = "$0.00";
-        amount.innerHTML = "$0.00";
-    }else{
-        numClass = customValue;
-    }
-});
 
 // კალკულატორის მათემატიკური პირობა.
 const condition = (bill, custom, person) => {
