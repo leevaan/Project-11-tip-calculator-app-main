@@ -12,8 +12,9 @@ const personBorder = document.querySelectorAll(".input-div")[1];
 const button = document.getElementsByTagName("button")[0];
 const tipClass = document.querySelectorAll(".tip");
 
-let tip, total, billValue, personValue, customValue, numClass, tipAction;
-console.log("🚀 ~ file: script.js:78 ~ personClass.addEventListener ~ personValue:", personValue)
+let tip, total, billValue, personValue, customValue, numClass;
+let tipAction = "inactive";
+
 // bill border style.
 billClass.addEventListener("focus", () => {
     billBorder.style.border = "2px solid #26C2AE";
@@ -38,17 +39,14 @@ personClass.addEventListener("focus", () => {
         personBorder.style.border = "2px solid #26C2AE";
         document.querySelector(".person-path").style.fill = "#00474B";
     }
-   
 });
-console.log("🚀 ~ file: script.js:44 ~ personClass.value:", personClass.value)
 personClass.addEventListener("blur", () => {
     // personClass.value = undefined;
     if(personClass.value != 0 || personClass.value == ""){
         personBorder.style.borderColor = "transparent";
         document.querySelector(".person-path").style.fill = "#9EBBBD";
     }
-        
-    });
+});
 
 //ვიმახსოვრებთ ველიუში ჩაწერილ ციფრს და სამი ველიუდან ( Bill, precent, person) თუ ბოლოს შევსო bill ველიუ ეს გაუშვებს დავთვლის ფუნქციას 
 billClass.addEventListener("input", () =>{
@@ -141,8 +139,6 @@ personClass.addEventListener("input", () =>{
         condition(billValue, numClass, personValue);
     }
 });
-
-
 
 // კალკულატორის მათემატიკური პირობა.
 const condition = (bill, custom, person) => {
